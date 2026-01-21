@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Typing Speed Test</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f6f8;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    background: #ffffff;
+    width: 520px;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.logo {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.logo img {
+    width: 80px;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.text-box {
+    background: #f1f1f1;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+textarea {
+    width: 100%;
+    height: 100px;
+    padding: 10px;
+    font-size: 15px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    resize: none;
+}
+
+.controls {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    align-items: center;
+}
+
+.timer {
+    font-weight: bold;
+}
+
+button {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.start-btn {
+    width: 100%;
+    margin-top: 10px;
+    background: #4CAF50;
+    color: white;
+    font-size: 16px;
+}
+
+.mute-btn {
+    background: #ff9800;
+    color: white;
+}
+
+.popup {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.popup-content {
+    background: white;
+    padding: 25px;
+    border-radius: 8px;
+    width: 360px;
+    text-align: center;
+}
+
+.green {
+    color: green;
+    font-weight: bold;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- LOGO -->
+    <div class="logo">
+        <img src="UNIK-Digital-Skills-Training_Logo.jpg" alt="Unik Logo">
+    </div>
+
+    <h2>Typing Speed Test</h2>
+
+    <div class="text-box" id="testText">
+        The quick brown fox jumps over the lazy dog. Practice typing to improve your speed and accuracy.
+    </div>
+
+    <textarea id="typingArea" placeholder="Start typing here..." disabled></textarea>
+
+    <div class="controls">
+        <div class="timer" id="timer">Time: 01:00</div>
+
+        <button class="mute-btn" onclick="toggleMute()" id="muteBtn">Mute</button>
+    </div>
+
+    <label>
+        Volume:
+        <input type="range" min="0" max="1" step="0.1" value="0.7" onchange="changeVolume(this.value)">
+    </label>
+
+    <button class="start-btn" onclick="startTest()">Start Test</button>
+
+</div>
+
+<!-- POPUP -->
+<div class="popup" id="popup">
+    <div class="popup-content">
+        <h3>Typing Test Complete!</h3>
+        <p>You typed the <b>1 Minute Typing Test</b>.</p>
+        <p>Your speed was <span class="green" id="wpm"></span> WPM with
+        <span class="green" id="accuracy"></span>% accuracy!</p>
+        <button onclick="location.reload()">Restart</button>
+    </div>
+</div>
+
+<!-- AUDIO FILES -->
+<audio id="startSound" src="mixkit-alarm-digital-clock-beep-989.wav"></audio>
+<audio id="warningSound" src="mixkit-repeating-arcade-beep-1084.wav"></audio>
+<audio id="endSound" src="mixkit-repeating-arcade-beep-1084.wav"></audio>
+
+<script>
+const testText = document.getElementById("testText").innerText;
+const typingArea = document.getElementById("typingArea");
+const timerDisplay = document.getElementById("timer");
+const popup = document.getElementById("popup");
+
+const startSound = document.getElementById("startSound");
+const warningSound = document.getElementById("warningSound");
+const endSound = document.getElementById("endSound");
+
+let time = 60; // 1 minutes
+let timer;
+let muted = false;
+
+function startTest() {
+    startSound.play();
+    typingArea.disabled = false;
+    typingArea.focus();
+    timer = setInterval(updateTimer, 1000);
+}
+
+function updateTimer() {
+    let minutes = Math.floor(time / 60);
+    let seconds = time % 60;
+
+    timerDisplay.innerText =
+        `Time: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+    // WARNING BEEP (LAST 10 SECONDS)
+    if (time <= 10 && time > 0 && !muted) {
+        warningSound.play();
+    }
+
+    if (time === 0) {
+        clearInterval(timer);
+        finishTest();
+    }
+    time--;
+}
+
+function finishTest() {
+    typingArea.disabled = true;
+
+    if (!muted) {
+        endSound.play();
+    }
+
+    let typedText = typingArea.value.trim();
+    let wordsTyped = typedText.split(/\s+/).length;
+    let wpm = Math.round(wordsTyped / 3);
+
+    let correctChars = 0;
+    for (let i = 0; i < typedText.length; i++) {
+        if (typedText[i] === testText[i]) {
+            correctChars++;
+        }
+    }
+
+    let accuracy = Math.round((correctChars / typedText.length) * 100 || 0);
+
+    document.getElementById("wpm").innerText = wpm;
+    document.getElementById("accuracy").innerText = accuracy;
+
+    popup.style.display = "flex";
+}
+
+function toggleMute() {
+    muted = !muted;
+    document.getElementById("muteBtn").innerText = muted ? "Unmute" : "Mute";
+}
+
+function changeVolume(value) {
+    startSound.volume = value;
+    warningSound.volume = value;
+    endSound.volume = value;
+}
+</script>
+
+</body>
+</html>

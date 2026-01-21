@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Typing Certificate</title>
+<style>
+body {
+    font-family: Arial;
+    text-align: center;
+    padding: 40px;
+}
+.certificate {
+    border: 8px solid #2c3e50;
+    padding: 30px;
+}
+h1 { color: #2c3e50; }
+p img{
+    width: 90px;
+    height: 70px;
+}
+</style>
+</head>
+<body>
+
+<div class="certificate">
+    <h1>Certificate of Achievement</h1>
+    <p>This is to certify that</p>
+
+    <h2 id="studentName"></h2>
+
+    <p>has successfully completed the</p>
+    <h3>Typing Speed & Accuracy Test</h3>
+
+    <p>with a speed of <b id="wpm"></b> WPM  
+    and accuracy of <b id="accuracy"></b>%</p>
+
+    <p>Date: <span id="date"></span></p>
+
+    <br><br>
+    <p><img src="sign updated.png" alt=""><br>
+    Instructor Signature</p>
+</div>
+
+<script>
+const data = JSON.parse(localStorage.getItem("typingResult"));
+document.getElementById("studentName").innerText = data.name;
+document.getElementById("wpm").innerText = data.wpm;
+document.getElementById("accuracy").innerText = data.accuracy;
+document.getElementById("date").innerText = new Date().toDateString();
+
+</script>
+
+</body>
+</html>
