@@ -277,21 +277,9 @@ function setVolume(v) {
 }
 
 
-function saveToExcel(name, wpm, accuracy) {
-    let csv = "Name,WPM,Accuracy\n";
-    csv += `${name},${wpm},${accuracy}\n`;
-
-    let blob = new Blob([csv], { type: "text/csv" });
-    let link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = "typing_results.csv";
-    link.click();
-}
-
-saveToExcel(studentName, wpm, accuracy);
-
 </script>
 
 </body>
 </html>
+
 
