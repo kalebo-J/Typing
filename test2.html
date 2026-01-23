@@ -98,6 +98,18 @@ button {
 }
 
 .green { color: green; font-weight: bold; }
+
+#studentName{
+  border: 2.5px solid darkred;
+  border-radius: 5px;
+}
+
+#timeSelect{
+  border: 2.5px solid darkred;
+  border-radius: 5px;
+  font-family: Arial;
+  margin-bottom: 10px;
+}
 </style>
 </head>
 
@@ -120,20 +132,25 @@ button {
     <label>
         Select Time:
         <select id="timeSelect">
-            <option value="60">1 Minute</option>
-            <option value="180" selected>3 Minutes</option>
+            <option value="60" selected>1 Minute</option>
+            <option value="180" >3 Minutes</option>
             <option value="300">5 Minutes</option>
         </select>
     </label>
 
     <div class="text-box" id="displayText">
-        The quick brown fox jumps over the lazy dog. Practice typing to improve speed and accuracy.
+        Technology has become an important part of our daily lives. 
+        We use computers to type documents, send emails, browse the internet, and store information.
+        Learning basic computer skills helps students work faster, communicate better, and prepare for
+        future careers. With regular practice, typing speed and accuracy improve, making tasks easier 
+        and more efficient. Using technology responsibly also helps protect personal information and
+        promotes safe digital habits.
     </div>
 
     <textarea id="typingArea" placeholder="Start typing here..." disabled></textarea>
 
     <div class="controls">
-        <div id="timer">Time: 03:00</div>
+        <div id="timer">Time: 01:00</div>
         <button class="mute-btn" id="muteBtn" onclick="toggleMute()">Mute</button>
     </div>
 
@@ -277,3 +294,4 @@ saveToExcel(studentName, wpm, accuracy);
 
 </body>
 </html>
+
